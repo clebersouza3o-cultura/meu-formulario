@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <!-- Importação do script oficial da extensão do Blip Chat -->
+    <script src="https://unpkg.com" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Preencha seus dados</h2>
+    <form id="cadastroForm">
+        <div class="form-group">
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" required placeholder="Ex: João Silva">
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="tel" id="telefone" required placeholder="Ex: 11999999999">
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" required placeholder="Ex: joao@email.com">
+        </div>
+        <button type="submit">Enviar Dados</button>
+    </form>
+</div>
+
+<script>
+    // Inicializa a extensão do Blip Chat
+    const blipClient = new BlipChatExtension();
+
+    document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Impede o recarregamento da página
+
+        // Captura os valores digitados pelo usuário
+        const nome = document.getElementById('nome').value;
+        const telefone = document.getElementById('telefone').value;
+        const email = document.getElementById('email').value;
+
+        // Cria o objeto com os dados salvos
+        const dadosUsuario = {
+            nome: nome,
+            telefone: telefone,
+            email: email
+        };
+
+        // Envia os dados de volta para o Bot
+        // Usamos um tipo de texto simples ('Formulário Preenchido'), mas anexamos o objeto JSON nos metadados
+        blipClient.sendMessage({
+            type: "text/plain",
+            content: "Formulário preenchido com sucesso!",
+            metadata: dadosUsuario
+        }).then(function() {
+            // Após enviar com sucesso, fecha a janela do Elemento Web automaticamente
+            blipClient.closeWebView();
+        }).catch(function(err) {
+            console.error("Erro ao enviar dados para o Blip:", err);
+            alert("Ocorreu um erro ao enviar os dados. Por favor, tente novamente.");
+        });
+    });
+</script>
+
+</body>
+</html>
